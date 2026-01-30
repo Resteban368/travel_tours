@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Reserva - Travel Tours</title>
+    <style>
+        :root {
+            --primary-dark: #0F2027;   /* Azul Mar Oscuro */
+            --primary-mid: #203A43;    /* Azul Intermedio */
+            --primary-light: #2C5364;  /* Azul Claro */
+            --accent: #4CA1AF;         /* Turquesa suave para bordes */
+            --white: #ffffff;
+            --error: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, var(--primary-dark), var(--primary-light));
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            background-color: var(--white);
+            margin: 0 auto;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: var(--primary-dark);
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .tour-badge {
+            background-color: var(--accent);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .section-title {
+            color: var(--primary-mid);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--primary-mid);
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box; /* Importante para que el padding no rompa el ancho */
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--primary-light);
+            outline: none;
+        }
+
+        input.invalid {
+            border-color: var(--error);
+        }
+
+        .error-msg {
+            color: var(--error);
+            font-size: 0.8em;
+            display: none;
+            margin-top: 5px;
+        }
+
+        /* Estilos para Acompañantes Dinámicos */
+        .companion-card {
+            background-color: #f8f9fa;
+            border-left: 5px solid var(--accent);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        button.submit-btn {
+            background: linear-gradient(to right, var(--primary-mid), var(--primary-light));
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button.submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
+            .container { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Registro de Reserva - Travel Tours</h1>
+    <div class="description">
+        Por favor completa los datos del titular y los acompañantes para generar tu seguro de viaje y confirmar la reserva.
+        <br>
+        <span id="tourNameDisplay" class="tour-badge">Cargando Tour...</span>
+    </div>
+
+    <form id="reservaForm">
+        <input type="hidden" id="chatId" name="chatId">
+        <input type="hidden" id="tourName" name="tourName">
+
+        <div class="section-title">👤 Datos del Responsable (Titular)</div>
+        <div class="form-grid">
+            <div class="form-group full-width">
+                <label>Nombre Completo *</label>
+                <input type="text" id="titular_nombre" required minlength="5">
+                <div class="error-msg">Ingresa el nombre completo.</div>
+            </div>
+            
+            <div class="form-group">
+                <label>Documento de Identificación *</label>
+                <input type="text" id="titular_documento" required>
+                <div class="error-msg">Campo obligatorio.</div>
+            </div>
+
+            <div class="form-group">
+                <label>Fecha de Nacimiento *</label>
+                <input type="date" id="titular_nacimiento" required>
+                <div class="error-msg">Selecciona una fecha válida.</div>
+            </div>
+
+            <div class="form-group">
+                <label>Número de Teléfono *</label>
+                <input type="tel" id="titular_telefono" required pattern="[0-9]{7,15}">
+                <div class="error-msg">Ingresa un número válido.</div>
+            </div>
+
+            <div class="form-group">
+                <label>Correo Electrónico *</label>
+                <input type="email" id="titular_email" required>
+                <div class="error-msg">Ingresa un correo válido (ej: usuario@mail.com).</div>
+            </div>
+
+            <div class="form-group full-width">
+                <label>Dirección de Residencia *</label>
+                <input type="text" id="titular_direccion" required>
+                <div class="error-msg">Campo obligatorio.</div>
+            </div>
+        </div>
+
+        <div class="section-title">👥 Acompañantes</div>
+        
+        <div class="form-group">
+            <label>¿Cuántos acompañantes viajan contigo? (Sin contarte a ti)</label>
+            <input type="number" id="num_acompanantes" min="0" max="20" value="0" style="width: 100px;">
+        </div>
+
+        <div id="acompanantesContainer">
+            </div>
+
+        <button type="button" class="submit-btn" onclick="validarYEnviar()">CONFIRMAR RESERVA ✈️</button>
+    </form>
+</div>
+
+<script>
+    // 1. OBTENER PARÁMETROS DE LA URL
+    document.addEventListener("DOMContentLoaded", function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        const tour = urlParams.get('tour') || "Tour General";
+        const chatId = urlParams.get('chat_id') || "Desconocido";
+
+        document.getElementById('tourNameDisplay').textContent = "Tour: " + tour;
+        document.getElementById('tourName').value = tour;
+        document.getElementById('chatId').value = chatId;
+    });
+
+    // 2. GENERADOR DINÁMICO DE ACOMPAÑANTES
+    const numInput = document.getElementById('num_acompanantes');
+    const container = document.getElementById('acompanantesContainer');
+
+    numInput.addEventListener('input', function() {
+        const cantidad = parseInt(this.value) || 0;
+        container.innerHTML = ''; // Limpiar anteriores
+
+        for (let i = 1; i <= cantidad; i++) {
+            const html = `
+                <div class="companion-card">
+                    <strong>Acompañante #${i}</strong>
+                    <div class="form-grid" style="margin-top: 10px;">
+                        <div class="form-group full-width">
+                            <label>Nombre Completo *</label>
+                            <input type="text" class="comp-nombre" required minlength="3">
+                        </div>
+                        <div class="form-group">
+                            <label>Documento *</label>
+                            <input type="text" class="comp-doc" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha Nacimiento *</label>
+                            <input type="date" class="comp-nacimiento" required>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        }
+    });
+
+    // 3. FUNCIÓN DE VALIDACIÓN Y ENVÍO
+    function validarYEnviar() {
+        let esValido = true;
+        
+        // A. Validar campos del Titular
+        const inputsTitular = document.querySelectorAll('#reservaForm input:not(.comp-nombre):not(.comp-doc):not(.comp-nacimiento)');
+        inputsTitular.forEach(input => {
+            if (!input.checkValidity()) {
+                input.classList.add('invalid');
+                input.nextElementSibling.style.display = 'block'; // Mostrar msg error
+                esValido = false;
+            } else {
+                input.classList.remove('invalid');
+                if(input.nextElementSibling) input.nextElementSibling.style.display = 'none';
+            }
+        });
+
+        // B. Validar Acompañantes
+        const inputsComp = document.querySelectorAll('.comp-nombre, .comp-doc, .comp-nacimiento');
+        inputsComp.forEach(input => {
+            if (!input.value.trim()) {
+                input.classList.add('invalid');
+                esValido = false;
+            } else {
+                input.classList.remove('invalid');
+            }
+        });
+
+        if (!esValido) {
+            alert("Por favor corrige los campos en rojo.");
+            return;
+        }
+
+        // 4. PREPARAR DATOS JSON
+        const datos = {
+            chatId: document.getElementById('chatId').value,
+            tour: document.getElementById('tourName').value,
+            titular: {
+                nombre: document.getElementById('titular_nombre').value,
+                documento: document.getElementById('titular_documento').value,
+                nacimiento: document.getElementById('titular_nacimiento').value,
+                telefono: document.getElementById('titular_telefono').value,
+                email: document.getElementById('titular_email').value,
+                direccion: document.getElementById('titular_direccion').value
+            },
+            acompanantes: []
+        };
+
+        // Recolectar acompañantes
+        const tarjetas = document.querySelectorAll('.companion-card');
+        tarjetas.forEach(card => {
+            datos.acompanantes.push({
+                nombre: card.querySelector('.comp-nombre').value,
+                documento: card.querySelector('.comp-doc').value,
+                nacimiento: card.querySelector('.comp-nacimiento').value
+            });
+        });
+
+        // 5. ENVIAR A N8N (AQUÍ DEBES PONER TU URL DE N8N)
+        const N8N_WEBHOOK_URL = 'https://TU-URL-DE-N8N.com/webhook/guardar-reserva'; // <--- CAMBIA ESTO
+
+        const btn = document.querySelector('.submit-btn');
+        btn.textContent = "Enviando...";
+        btn.disabled = true;
+
+        fetch(N8N_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datos)
+        })
+        .then(response => {
+            if (response.ok) {
+                document.body.innerHTML = "<div class='container' style='text-align:center'><h1>¡Reserva Recibida! ✅</h1><p>Ya puedes volver al chat de Telegram.</p></div>";
+            } else {
+                throw new Error('Error en el servidor');
+            }
+        })
+        .catch(error => {
+            alert("Hubo un error al enviar. Intenta de nuevo.");
+            btn.textContent = "CONFIRMAR RESERVA ✈️";
+            btn.disabled = false;
+        });
+    }
+</script>
+
+</body>
+</html>
