@@ -2,179 +2,241 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Registro de Reserva - Travel Tours</title>
     <style>
         :root {
-            --primary-dark: #0F2027;   /* Azul Mar Oscuro */
-            --primary-mid: #203A43;    /* Azul Intermedio */
-            --primary-light: #2C5364;  /* Azul Claro */
-            --accent: #4CA1AF;         /* Turquesa suave para bordes */
+            --primary-dark: #0F2027;
+            --primary-mid: #203A43;
+            --primary-light: #2C5364;
+            --accent: #4CA1AF;
             --white: #ffffff;
+            --bg-gradient: linear-gradient(135deg, #0F2027, #2C5364);
             --error: #e74c3c;
         }
 
+        * {
+            box-sizing: border-box; /* Vital para que el padding no rompa el ancho en móviles */
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(to right, var(--primary-dark), var(--primary-light));
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-gradient);
             margin: 0;
-            padding: 20px;
+            padding: 0; /* Quitamos padding del body en móvil */
             color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Alineación superior para móviles */
         }
 
         .container {
-            max-width: 800px;
             background-color: var(--white);
-            margin: 0 auto;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 800px;
+            margin: 0;
+            padding: 25px 20px;
+            border-radius: 0; /* Cuadrado en móvil para aprovechar espacio */
+            box-shadow: none;
+        }
+
+        /* Estilos específicos para Escritorio (Pantallas grandes) */
+        @media (min-width: 601px) {
+            body {
+                padding: 40px 20px;
+                align-items: center; /* Centrado vertical en PC */
+            }
+            .container {
+                border-radius: 15px;
+                padding: 40px;
+                box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+                margin: 20px auto;
+            }
         }
 
         h1 {
             color: var(--primary-dark);
             text-align: center;
+            font-size: 1.6rem;
+            margin-top: 0;
             margin-bottom: 10px;
         }
 
         .description {
             text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+            line-height: 1.5;
         }
 
         .tour-badge {
-            background-color: var(--accent);
+            background: var(--primary-mid);
             color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
+            padding: 6px 15px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
             display: inline-block;
-            margin-top: 5px;
+            margin-top: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
         .section-title {
             color: var(--primary-mid);
             border-bottom: 2px solid var(--accent);
-            padding-bottom: 10px;
-            margin-top: 30px;
+            padding-bottom: 8px;
+            margin-top: 35px;
             margin-bottom: 20px;
-            font-size: 1.4em;
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
+        /* GRID SYSTEM */
         .form-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            grid-template-columns: 1fr; /* Por defecto 1 columna (Móvil) */
+            gap: 15px;
+        }
+
+        @media (min-width: 601px) {
+            .form-grid {
+                grid-template-columns: 1fr 1fr; /* 2 columnas en PC */
+                gap: 20px;
+            }
+            .full-width {
+                grid-column: span 2;
+            }
         }
 
         .form-group {
-            margin-bottom: 15px;
-        }
-
-        .full-width {
-            grid-column: span 2;
+            margin-bottom: 5px;
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             font-weight: 600;
-            color: var(--primary-mid);
+            color: var(--primary-dark);
+            font-size: 0.9rem;
         }
 
-        input {
+        /* INPUTS - EL SECRETO ANTI-ZOOM */
+        input, select, textarea {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            box-sizing: border-box; /* Importante para que el padding no rompa el ancho */
-            transition: border-color 0.3s;
+            padding: 14px; /* Zona táctil más grande */
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 16px !important; /* <--- ESTO EVITA EL ZOOM EN IPHONE */
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+            -webkit-appearance: none; /* Quita estilos nativos feos de iOS */
         }
 
         input:focus {
-            border-color: var(--primary-light);
+            background-color: #fff;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(76, 161, 175, 0.2);
             outline: none;
         }
 
         input.invalid {
             border-color: var(--error);
+            background-color: #fff5f5;
         }
 
         .error-msg {
             color: var(--error);
-            font-size: 0.8em;
+            font-size: 0.8rem;
             display: none;
-            margin-top: 5px;
+            margin-top: 4px;
+            margin-left: 2px;
         }
 
-        /* Estilos para Acompañantes Dinámicos */
+        /* TARJETAS DE ACOMPAÑANTES */
         .companion-card {
-            background-color: #f8f9fa;
+            background-color: #f0f4f8;
+            border: 1px solid #d1d9e6;
             border-left: 5px solid var(--accent);
             padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            animation: fadeIn 0.5s;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            animation: slideIn 0.4s ease-out;
         }
 
-        @keyframes fadeIn {
+        @keyframes slideIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        .companion-title {
+            font-weight: bold;
+            color: var(--primary-light);
+            margin-bottom: 10px;
+            display: block;
+            font-size: 1.1rem;
+        }
+
+        /* BOTÓN FLOTANTE O GRANDE */
         button.submit-btn {
-            background: linear-gradient(to right, var(--primary-mid), var(--primary-light));
+            background: linear-gradient(to right, var(--primary-mid), #4CA1AF);
             color: white;
             border: none;
             width: 100%;
-            padding: 15px;
-            font-size: 1.2em;
-            border-radius: 8px;
+            padding: 18px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 12px;
             cursor: pointer;
             margin-top: 30px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        button.submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        button.submit-btn:active {
+            transform: scale(0.98);
         }
 
-        /* Responsive */
-        @media (max-width: 600px) {
-            .form-grid { grid-template-columns: 1fr; }
-            .full-width { grid-column: span 1; }
-            .container { padding: 20px; }
+        /* Input específico para cantidad pequeño */
+        #num_acompanantes {
+            max-width: 100px;
+            text-align: center;
+            font-weight: bold;
         }
+
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Registro de Reserva - Travel Tours</h1>
+    <h1>Registro de Reserva ✈️</h1>
     <div class="description">
-        Por favor completa los datos del titular y los acompañantes para generar tu seguro de viaje y confirmar la reserva.
+        Travel Tours Florencia
         <br>
         <span id="tourNameDisplay" class="tour-badge">Cargando Tour...</span>
     </div>
 
-    <form id="reservaForm">
+    <form id="reservaForm" novalidate>
         <input type="hidden" id="chatId" name="chatId">
         <input type="hidden" id="tourName" name="tourName">
 
-        <div class="section-title">👤 Datos del Responsable (Titular)</div>
+        <div class="section-title">👤 Responsable de la Reserva</div>
         <div class="form-grid">
             <div class="form-group full-width">
                 <label>Nombre Completo *</label>
-                <input type="text" id="titular_nombre" required minlength="5">
-                <div class="error-msg">Ingresa el nombre completo.</div>
+                <input type="text" id="titular_nombre" placeholder="Ej: Juan Pérez" required minlength="5">
+                <div class="error-msg">Por favor escribe tu nombre completo.</div>
             </div>
             
             <div class="form-group">
-                <label>Documento de Identificación *</label>
-                <input type="text" id="titular_documento" required>
+                <label>Documento de Identidad *</label>
+                <input type="number" id="titular_documento" placeholder="Sin puntos" inputmode="numeric" required>
                 <div class="error-msg">Campo obligatorio.</div>
             </div>
 
@@ -185,15 +247,15 @@
             </div>
 
             <div class="form-group">
-                <label>Número de Teléfono *</label>
-                <input type="tel" id="titular_telefono" required pattern="[0-9]{7,15}">
+                <label>Celular / WhatsApp *</label>
+                <input type="tel" id="titular_telefono" placeholder="310..." inputmode="tel" required pattern="[0-9]{7,15}">
                 <div class="error-msg">Ingresa un número válido.</div>
             </div>
 
             <div class="form-group">
                 <label>Correo Electrónico *</label>
-                <input type="email" id="titular_email" required>
-                <div class="error-msg">Ingresa un correo válido (ej: usuario@mail.com).</div>
+                <input type="email" id="titular_email" placeholder="nombre@correo.com" required>
+                <div class="error-msg">Ingresa un correo válido.</div>
             </div>
 
             <div class="form-group full-width">
@@ -205,15 +267,21 @@
 
         <div class="section-title">👥 Acompañantes</div>
         
-        <div class="form-group">
-            <label>¿Cuántos acompañantes viajan contigo? (Sin contarte a ti)</label>
-            <input type="number" id="num_acompanantes" min="0" max="20" value="0" style="width: 100px;">
+        <div class="form-group" style="margin-bottom: 20px;">
+            <label>¿Cuántas personas viajan contigo? (Sin contarte a ti)</label>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <input type="number" id="num_acompanantes" inputmode="numeric" min="0" max="20" value="0">
+                <span style="font-size: 0.9rem; color: #666;">personas extra</span>
+            </div>
         </div>
 
         <div id="acompanantesContainer">
             </div>
 
-        <button type="button" class="submit-btn" onclick="validarYEnviar()">CONFIRMAR RESERVA ✈️</button>
+        <button type="button" class="submit-btn" onclick="validarYEnviar()">CONFIRMAR RESERVA ✅</button>
+        <p style="text-align: center; font-size: 0.8rem; color: #999; margin-top: 15px;">
+            Tus datos están seguros con Travel Tours.
+        </p>
     </form>
 </div>
 
@@ -225,7 +293,7 @@
         const tour = urlParams.get('tour') || "Tour General";
         const chatId = urlParams.get('chat_id') || "Desconocido";
 
-        document.getElementById('tourNameDisplay').textContent = "Tour: " + tour;
+        document.getElementById('tourNameDisplay').textContent = tour;
         document.getElementById('tourName').value = tour;
         document.getElementById('chatId').value = chatId;
     });
@@ -235,21 +303,24 @@
     const container = document.getElementById('acompanantesContainer');
 
     numInput.addEventListener('input', function() {
-        const cantidad = parseInt(this.value) || 0;
+        let cantidad = parseInt(this.value);
+        if (isNaN(cantidad) || cantidad < 0) cantidad = 0;
+        if (cantidad > 20) cantidad = 20; // Límite de seguridad
+
         container.innerHTML = ''; // Limpiar anteriores
 
         for (let i = 1; i <= cantidad; i++) {
             const html = `
                 <div class="companion-card">
-                    <strong>Acompañante #${i}</strong>
-                    <div class="form-grid" style="margin-top: 10px;">
+                    <span class="companion-title">Acompañante #${i}</span>
+                    <div class="form-grid">
                         <div class="form-group full-width">
                             <label>Nombre Completo *</label>
-                            <input type="text" class="comp-nombre" required minlength="3">
+                            <input type="text" class="comp-nombre" placeholder="Nombre Apellido" required minlength="3">
                         </div>
                         <div class="form-group">
                             <label>Documento *</label>
-                            <input type="text" class="comp-doc" required>
+                            <input type="number" inputmode="numeric" class="comp-doc" placeholder="Número" required>
                         </div>
                         <div class="form-group">
                             <label>Fecha Nacimiento *</label>
@@ -265,17 +336,28 @@
     // 3. FUNCIÓN DE VALIDACIÓN Y ENVÍO
     function validarYEnviar() {
         let esValido = true;
+        let primerError = null;
         
         // A. Validar campos del Titular
         const inputsTitular = document.querySelectorAll('#reservaForm input:not(.comp-nombre):not(.comp-doc):not(.comp-nacimiento)');
         inputsTitular.forEach(input => {
+            // Ignorar inputs ocultos o el de cantidad
+            if (input.type === 'hidden' || input.id === 'num_acompanantes') return;
+
             if (!input.checkValidity()) {
                 input.classList.add('invalid');
-                input.nextElementSibling.style.display = 'block'; // Mostrar msg error
+                const errorDiv = input.nextElementSibling;
+                if(errorDiv && errorDiv.classList.contains('error-msg')) {
+                    errorDiv.style.display = 'block';
+                }
                 esValido = false;
+                if (!primerError) primerError = input;
             } else {
                 input.classList.remove('invalid');
-                if(input.nextElementSibling) input.nextElementSibling.style.display = 'none';
+                const errorDiv = input.nextElementSibling;
+                if(errorDiv && errorDiv.classList.contains('error-msg')) {
+                    errorDiv.style.display = 'none';
+                }
             }
         });
 
@@ -285,13 +367,18 @@
             if (!input.value.trim()) {
                 input.classList.add('invalid');
                 esValido = false;
+                if (!primerError) primerError = input;
             } else {
                 input.classList.remove('invalid');
             }
         });
 
         if (!esValido) {
-            alert("Por favor corrige los campos en rojo.");
+            // Scroll suave hacia el primer error
+            if (primerError) {
+                primerError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                primerError.focus();
+            }
             return;
         }
 
@@ -320,12 +407,17 @@
             });
         });
 
-        // 5. ENVIAR A N8N (AQUÍ DEBES PONER TU URL DE N8N)
-        const N8N_WEBHOOK_URL = 'https://unvolubly-undefiled-kristian.ngrok-free.dev/webhook-test/guardar-reserva'; // <--- CAMBIA ESTO
+        // 5. ENVIAR A N8N
+        // ============================================================
+        // ⚠️ PEGA AQUÍ TU URL DE N8N (La Production URL, no la de Test)
+        // ============================================================
+        const N8N_WEBHOOK_URL = 'https://unvolubly-undefiled-kristian.ngrok-free.dev/webhook-test/guardar-reserva'; 
 
         const btn = document.querySelector('.submit-btn');
-        btn.textContent = "Enviando...";
+        const textoOriginal = btn.innerText;
+        btn.textContent = "ENVIANDO DATOS...";
         btn.disabled = true;
+        btn.style.opacity = "0.7";
 
         fetch(N8N_WEBHOOK_URL, {
             method: 'POST',
@@ -334,15 +426,23 @@
         })
         .then(response => {
             if (response.ok) {
-                document.body.innerHTML = "<div class='container' style='text-align:center'><h1>¡Reserva Recibida! ✅</h1><p>Ya puedes volver al chat de Telegram.</p></div>";
+                document.body.innerHTML = `
+                    <div class="container" style="text-align:center; padding: 50px 20px;">
+                        <div style="font-size: 50px;">✅</div>
+                        <h1 style="margin-top:20px;">¡Datos Enviados!</h1>
+                        <p>Hemos recibido tu información correctamente.</p>
+                        <p>Ya puedes cerrar esta ventana y volver al chat.</p>
+                    </div>
+                `;
             } else {
                 throw new Error('Error en el servidor');
             }
         })
         .catch(error => {
-            alert("Hubo un error al enviar. Intenta de nuevo.");
-            btn.textContent = "CONFIRMAR RESERVA ✈️";
+            alert("Hubo un error de conexión. Por favor intenta de nuevo.");
+            btn.textContent = textoOriginal;
             btn.disabled = false;
+            btn.style.opacity = "1";
         });
     }
 </script>
