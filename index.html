@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -16,19 +17,22 @@
         }
 
         * {
-            box-sizing: border-box; /* Vital para que el padding no rompa el ancho en móviles */
+            box-sizing: border-box;
+            /* Vital para que el padding no rompa el ancho en móviles */
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background: var(--bg-gradient);
             margin: 0;
-            padding: 0; /* Quitamos padding del body en móvil */
+            padding: 0;
+            /* Quitamos padding del body en móvil */
             color: #333;
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Alineación superior para móviles */
+            align-items: flex-start;
+            /* Alineación superior para móviles */
         }
 
         .container {
@@ -37,7 +41,8 @@
             max-width: 800px;
             margin: 0;
             padding: 25px 20px;
-            border-radius: 0; /* Cuadrado en móvil para aprovechar espacio */
+            border-radius: 0;
+            /* Cuadrado en móvil para aprovechar espacio */
             box-shadow: none;
         }
 
@@ -45,12 +50,14 @@
         @media (min-width: 601px) {
             body {
                 padding: 40px 20px;
-                align-items: center; /* Centrado vertical en PC */
+                align-items: center;
+                /* Centrado vertical en PC */
             }
+
             .container {
                 border-radius: 15px;
                 padding: 40px;
-                box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
                 margin: 20px auto;
             }
         }
@@ -80,7 +87,7 @@
             font-weight: 600;
             display: inline-block;
             margin-top: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .section-title {
@@ -99,15 +106,18 @@
         /* GRID SYSTEM */
         .form-grid {
             display: grid;
-            grid-template-columns: 1fr; /* Por defecto 1 columna (Móvil) */
+            grid-template-columns: 1fr;
+            /* Por defecto 1 columna (Móvil) */
             gap: 15px;
         }
 
         @media (min-width: 601px) {
             .form-grid {
-                grid-template-columns: 1fr 1fr; /* 2 columnas en PC */
+                grid-template-columns: 1fr 1fr;
+                /* 2 columnas en PC */
                 gap: 20px;
             }
+
             .full-width {
                 grid-column: span 2;
             }
@@ -126,15 +136,20 @@
         }
 
         /* INPUTS - EL SECRETO ANTI-ZOOM */
-        input, select, textarea {
+        input,
+        select,
+        textarea {
             width: 100%;
-            padding: 14px; /* Zona táctil más grande */
+            padding: 14px;
+            /* Zona táctil más grande */
             border: 1px solid #ccc;
             border-radius: 10px;
-            font-size: 16px !important; /* <--- ESTO EVITA EL ZOOM EN IPHONE */
+            font-size: 16px !important;
+            /* <--- ESTO EVITA EL ZOOM EN IPHONE */
             background-color: #f9f9f9;
             transition: all 0.3s ease;
-            -webkit-appearance: none; /* Quita estilos nativos feos de iOS */
+            -webkit-appearance: none;
+            /* Quita estilos nativos feos de iOS */
         }
 
         input:focus {
@@ -169,8 +184,15 @@
         }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .companion-title {
@@ -193,7 +215,7 @@
             border-radius: 12px;
             cursor: pointer;
             margin-top: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             transition: transform 0.2s;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -209,108 +231,111 @@
             text-align: center;
             font-weight: bold;
         }
-
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <h1>Registro de Reserva ✈️</h1>
-    <div class="description">
-        Travel Tours Florencia
-        <br>
-        <span id="tourNameDisplay" class="tour-badge">Cargando Tour...</span>
+    <div class="container">
+        <h1>Registro de Reserva ✈️</h1>
+        <div class="description">
+            Travel Tours Florencia
+            <br>
+            <span id="tourNameDisplay" class="tour-badge">Cargando Tour...</span>
+        </div>
+
+        <form id="reservaForm" novalidate>
+            <input type="hidden" id="chatId" name="chatId">
+            <input type="hidden" id="tourName" name="tourName">
+
+            <div class="section-title">👤 Responsable de la Reserva</div>
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label>Nombre Completo *</label>
+                    <input type="text" id="titular_nombre" placeholder="Ej: Juan Pérez" required minlength="5">
+                    <div class="error-msg">Por favor escribe tu nombre completo.</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Documento de Identidad *</label>
+                    <input type="number" id="titular_documento" placeholder="Sin puntos" inputmode="numeric" required>
+                    <div class="error-msg">Campo obligatorio.</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Fecha de Nacimiento *</label>
+                    <input type="date" id="titular_nacimiento" required>
+                    <div class="error-msg">Selecciona una fecha válida.</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Celular / WhatsApp *</label>
+                    <input type="tel" id="titular_telefono" placeholder="310..." inputmode="tel" required
+                        pattern="[0-9]{7,15}">
+                    <div class="error-msg">Ingresa un número válido.</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Correo Electrónico *</label>
+                    <input type="email" id="titular_email" placeholder="nombre@correo.com" required>
+                    <div class="error-msg">Ingresa un correo válido.</div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Dirección de Residencia *</label>
+                    <input type="text" id="titular_direccion" required>
+                    <div class="error-msg">Campo obligatorio.</div>
+                </div>
+            </div>
+
+            <div class="section-title">👥 Acompañantes</div>
+
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label>¿Cuántas personas viajan contigo? (Sin contarte a ti)</label>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="number" id="num_acompanantes" inputmode="numeric" min="0" max="20" value="0">
+                    <span style="font-size: 0.9rem; color: #666;">personas extra</span>
+                </div>
+            </div>
+
+            <div id="acompanantesContainer">
+            </div>
+
+            <button type="button" class="submit-btn" onclick="validarYEnviar()">CONFIRMAR RESERVA ✅</button>
+            <p style="text-align: center; font-size: 0.8rem; color: #999; margin-top: 15px;">
+                Tus datos están seguros con Travel Tours.
+            </p>
+        </form>
     </div>
 
-    <form id="reservaForm" novalidate>
-        <input type="hidden" id="chatId" name="chatId">
-        <input type="hidden" id="tourName" name="tourName">
+    <script>
+        // 1. OBTENER PARÁMETROS DE LA URL
+        // 1. CAPTURAR EL ID_TOUR DE LA URL
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URLSearchParams(window.location.search);
 
-        <div class="section-title">👤 Responsable de la Reserva</div>
-        <div class="form-grid">
-            <div class="form-group full-width">
-                <label>Nombre Completo *</label>
-                <input type="text" id="titular_nombre" placeholder="Ej: Juan Pérez" required minlength="5">
-                <div class="error-msg">Por favor escribe tu nombre completo.</div>
-            </div>
-            
-            <div class="form-group">
-                <label>Documento de Identidad *</label>
-                <input type="number" id="titular_documento" placeholder="Sin puntos" inputmode="numeric" required>
-                <div class="error-msg">Campo obligatorio.</div>
-            </div>
+            // Buscamos 'id_tour' y 'chat_id'
+            const tourId = urlParams.get('id_tour') || "0";
+            const chatId = urlParams.get('chat_id') || "Desconocido";
 
-            <div class="form-group">
-                <label>Fecha de Nacimiento *</label>
-                <input type="date" id="titular_nacimiento" required>
-                <div class="error-msg">Selecciona una fecha válida.</div>
-            </div>
+            // Asignamos a los inputs ocultos
+            document.getElementById('tourId').value = tourId;
+            document.getElementById('chatId').value = chatId;
+        });
 
-            <div class="form-group">
-                <label>Celular / WhatsApp *</label>
-                <input type="tel" id="titular_telefono" placeholder="310..." inputmode="tel" required pattern="[0-9]{7,15}">
-                <div class="error-msg">Ingresa un número válido.</div>
-            </div>
+        // 2. GENERADOR DINÁMICO DE ACOMPAÑANTES
+        const numInput = document.getElementById('num_acompanantes');
+        const container = document.getElementById('acompanantesContainer');
 
-            <div class="form-group">
-                <label>Correo Electrónico *</label>
-                <input type="email" id="titular_email" placeholder="nombre@correo.com" required>
-                <div class="error-msg">Ingresa un correo válido.</div>
-            </div>
+        numInput.addEventListener('input', function () {
+            let cantidad = parseInt(this.value);
+            if (isNaN(cantidad) || cantidad < 0) cantidad = 0;
+            if (cantidad > 20) cantidad = 20; // Límite de seguridad
 
-            <div class="form-group full-width">
-                <label>Dirección de Residencia *</label>
-                <input type="text" id="titular_direccion" required>
-                <div class="error-msg">Campo obligatorio.</div>
-            </div>
-        </div>
+            container.innerHTML = ''; // Limpiar anteriores
 
-        <div class="section-title">👥 Acompañantes</div>
-        
-        <div class="form-group" style="margin-bottom: 20px;">
-            <label>¿Cuántas personas viajan contigo? (Sin contarte a ti)</label>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <input type="number" id="num_acompanantes" inputmode="numeric" min="0" max="20" value="0">
-                <span style="font-size: 0.9rem; color: #666;">personas extra</span>
-            </div>
-        </div>
-
-        <div id="acompanantesContainer">
-            </div>
-
-        <button type="button" class="submit-btn" onclick="validarYEnviar()">CONFIRMAR RESERVA ✅</button>
-        <p style="text-align: center; font-size: 0.8rem; color: #999; margin-top: 15px;">
-            Tus datos están seguros con Travel Tours.
-        </p>
-    </form>
-</div>
-
-<script>
-    // 1. OBTENER PARÁMETROS DE LA URL
-    document.addEventListener("DOMContentLoaded", function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        
-        const tour = urlParams.get('tour') || "Tour General";
-        const chatId = urlParams.get('chat_id') || "Desconocido";
-
-        document.getElementById('tourNameDisplay').textContent = tour;
-        document.getElementById('tourName').value = tour;
-        document.getElementById('chatId').value = chatId;
-    });
-
-    // 2. GENERADOR DINÁMICO DE ACOMPAÑANTES
-    const numInput = document.getElementById('num_acompanantes');
-    const container = document.getElementById('acompanantesContainer');
-
-    numInput.addEventListener('input', function() {
-        let cantidad = parseInt(this.value);
-        if (isNaN(cantidad) || cantidad < 0) cantidad = 0;
-        if (cantidad > 20) cantidad = 20; // Límite de seguridad
-
-        container.innerHTML = ''; // Limpiar anteriores
-
-        for (let i = 1; i <= cantidad; i++) {
-            const html = `
+            for (let i = 1; i <= cantidad; i++) {
+                const html = `
                 <div class="companion-card">
                     <span class="companion-title">Acompañante #${i}</span>
                     <div class="form-grid">
@@ -329,104 +354,106 @@
                     </div>
                 </div>
             `;
-            container.insertAdjacentHTML('beforeend', html);
-        }
-    });
-
-    // 3. FUNCIÓN DE VALIDACIÓN Y ENVÍO
-    function validarYEnviar() {
-        let esValido = true;
-        let primerError = null;
-        
-        // A. Validar campos del Titular
-        const inputsTitular = document.querySelectorAll('#reservaForm input:not(.comp-nombre):not(.comp-doc):not(.comp-nacimiento)');
-        inputsTitular.forEach(input => {
-            // Ignorar inputs ocultos o el de cantidad
-            if (input.type === 'hidden' || input.id === 'num_acompanantes') return;
-
-            if (!input.checkValidity()) {
-                input.classList.add('invalid');
-                const errorDiv = input.nextElementSibling;
-                if(errorDiv && errorDiv.classList.contains('error-msg')) {
-                    errorDiv.style.display = 'block';
-                }
-                esValido = false;
-                if (!primerError) primerError = input;
-            } else {
-                input.classList.remove('invalid');
-                const errorDiv = input.nextElementSibling;
-                if(errorDiv && errorDiv.classList.contains('error-msg')) {
-                    errorDiv.style.display = 'none';
-                }
+                container.insertAdjacentHTML('beforeend', html);
             }
         });
 
-        // B. Validar Acompañantes
-        const inputsComp = document.querySelectorAll('.comp-nombre, .comp-doc, .comp-nacimiento');
-        inputsComp.forEach(input => {
-            if (!input.value.trim()) {
-                input.classList.add('invalid');
-                esValido = false;
-                if (!primerError) primerError = input;
-            } else {
-                input.classList.remove('invalid');
-            }
-        });
+        // 3. FUNCIÓN DE VALIDACIÓN Y ENVÍO
+        function validarYEnviar() {
+            let esValido = true;
+            let primerError = null;
 
-        if (!esValido) {
-            // Scroll suave hacia el primer error
-            if (primerError) {
-                primerError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                primerError.focus();
-            }
-            return;
-        }
+            // A. Validar campos del Titular
+            const inputsTitular = document.querySelectorAll('#reservaForm input:not(.comp-nombre):not(.comp-doc):not(.comp-nacimiento)');
+            inputsTitular.forEach(input => {
+                // Ignorar inputs ocultos o el de cantidad
+                if (input.type === 'hidden' || input.id === 'num_acompanantes') return;
 
-        // 4. PREPARAR DATOS JSON
-        const datos = {
-            chatId: document.getElementById('chatId').value,
-            tour: document.getElementById('tourName').value,
-            titular: {
-                nombre: document.getElementById('titular_nombre').value,
-                documento: document.getElementById('titular_documento').value,
-                nacimiento: document.getElementById('titular_nacimiento').value,
-                telefono: document.getElementById('titular_telefono').value,
-                email: document.getElementById('titular_email').value,
-                direccion: document.getElementById('titular_direccion').value
-            },
-            acompanantes: []
-        };
-
-        // Recolectar acompañantes
-        const tarjetas = document.querySelectorAll('.companion-card');
-        tarjetas.forEach(card => {
-            datos.acompanantes.push({
-                nombre: card.querySelector('.comp-nombre').value,
-                documento: card.querySelector('.comp-doc').value,
-                nacimiento: card.querySelector('.comp-nacimiento').value
+                if (!input.checkValidity()) {
+                    input.classList.add('invalid');
+                    const errorDiv = input.nextElementSibling;
+                    if (errorDiv && errorDiv.classList.contains('error-msg')) {
+                        errorDiv.style.display = 'block';
+                    }
+                    esValido = false;
+                    if (!primerError) primerError = input;
+                } else {
+                    input.classList.remove('invalid');
+                    const errorDiv = input.nextElementSibling;
+                    if (errorDiv && errorDiv.classList.contains('error-msg')) {
+                        errorDiv.style.display = 'none';
+                    }
+                }
             });
-        });
 
-        // 5. ENVIAR A N8N
-        // ============================================================
-        // ⚠️ PEGA AQUÍ TU URL DE N8N (La Production URL, no la de Test)
-        // ============================================================
-        const N8N_WEBHOOK_URL = 'https://unvolubly-undefiled-kristian.ngrok-free.dev/webhook-test/guardar-reserva'; 
+            // B. Validar Acompañantes
+            const inputsComp = document.querySelectorAll('.comp-nombre, .comp-doc, .comp-nacimiento');
+            inputsComp.forEach(input => {
+                if (!input.value.trim()) {
+                    input.classList.add('invalid');
+                    esValido = false;
+                    if (!primerError) primerError = input;
+                } else {
+                    input.classList.remove('invalid');
+                }
+            });
 
-        const btn = document.querySelector('.submit-btn');
-        const textoOriginal = btn.innerText;
-        btn.textContent = "ENVIANDO DATOS...";
-        btn.disabled = true;
-        btn.style.opacity = "0.7";
+            if (!esValido) {
+                // Scroll suave hacia el primer error
+                if (primerError) {
+                    primerError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    primerError.focus();
+                }
+                return;
+            }
 
-        fetch(N8N_WEBHOOK_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(datos)
-        })
-        .then(response => {
-            if (response.ok) {
-                document.body.innerHTML = `
+            // 4. PREPARAR DATOS JSON
+            const datos = {
+                chatId: document.getElementById('chatId').value,
+                tourId: document.getElementById('tourId').value, // ENVIAMOS ID
+                titular: {
+                    nombre: document.getElementById('titular_nombre').value,
+                    documento: document.getElementById('titular_documento').value,
+                    nacimiento: document.getElementById('titular_nacimiento').value,
+                    telefono: document.getElementById('titular_telefono').value,
+                    email: document.getElementById('titular_email').value,
+                    direccion: document.getElementById('titular_direccion').value
+                },
+                acompanantes: []
+            };
+
+
+
+            // Recolectar acompañantes
+            const tarjetas = document.querySelectorAll('.companion-card');
+            tarjetas.forEach(card => {
+                datos.acompanantes.push({
+                    nombre: card.querySelector('.comp-nombre').value,
+                    documento: card.querySelector('.comp-doc').value,
+                    nacimiento: card.querySelector('.comp-nacimiento').value
+                });
+            });
+
+            // 5. ENVIAR A N8N
+            // ============================================================
+            // ⚠️ PEGA AQUÍ TU URL DE N8N (La Production URL, no la de Test)
+            // ============================================================
+            const N8N_WEBHOOK_URL = 'https://unvolubly-undefiled-kristian.ngrok-free.dev/webhook-test/guardar-reserva';
+
+            const btn = document.querySelector('.submit-btn');
+            const textoOriginal = btn.innerText;
+            btn.textContent = "ENVIANDO DATOS...";
+            btn.disabled = true;
+            btn.style.opacity = "0.7";
+
+            fetch(N8N_WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datos)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        document.body.innerHTML = `
                     <div class="container" style="text-align:center; padding: 50px 20px;">
                         <div style="font-size: 50px;">✅</div>
                         <h1 style="margin-top:20px;">¡Datos Enviados!</h1>
@@ -434,18 +461,19 @@
                         <p>Ya puedes cerrar esta ventana y volver al chat.</p>
                     </div>
                 `;
-            } else {
-                throw new Error('Error en el servidor');
-            }
-        })
-        .catch(error => {
-            alert("Hubo un error de conexión. Por favor intenta de nuevo.");
-            btn.textContent = textoOriginal;
-            btn.disabled = false;
-            btn.style.opacity = "1";
-        });
-    }
-</script>
+                    } else {
+                        throw new Error('Error en el servidor');
+                    }
+                })
+                .catch(error => {
+                    alert("Hubo un error de conexión. Por favor intenta de nuevo.");
+                    btn.textContent = textoOriginal;
+                    btn.disabled = false;
+                    btn.style.opacity = "1";
+                });
+        }
+    </script>
 
 </body>
+
 </html>
